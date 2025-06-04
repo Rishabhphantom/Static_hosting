@@ -20,7 +20,7 @@ jobs:
           aws-region: us-east-1
       - name: Sync S3 Bucket
         run: |
-          aws s3 sync . s3://apple-website-976 --delete --acl public-read --cache-control max-age=0,no-cache,no-store,must-revalidate
+          aws s3 sync . s3://apple-website-976 --delete --cache-control max-age=0,no-cache,no-store,must-revalidate
       
       - name: Invalidate Cloudfront Cache
         run: |
