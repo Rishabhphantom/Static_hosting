@@ -7,33 +7,35 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu:latest
+    runs-on: ubuntu-latest
 
     steps:
-      -name: Checkout Code
-       uses: actions/checkout@v4
+      - name: Checkout Code
+        uses: actions/checkout@v4
 
-      -name: Configure AWS Credentials
-       uses: aws-actins/configure-aws-credentials@v4
-       with: 
-       aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-       aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-       aws-region: us-east-1
-      -name: Debug: List Files
-       run: ls -la
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with: 
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Debug: List Files
+        run: ls -la
        
       - name: Sync S3 Bucket
         run: |
-          aws s3 sync . s3://apple-website-976 --delete -acl public-read --cache-control max-age=0,no-cache,no-store,must-revalidate
+          aws s3 sync . s3://apple-website-976 --delete --acl public-read --cache-control max-age=0,no-cache,no-store,must-revalidate
       
       - name: Invalidate Cloudfront Cache
-        runs: |
+        run: |
           aws cloudfront create-invalidation \
-            -- distribution-id E2XVATXGFMTJRS \
-            -- paths "/*"
+            --distribution-id E2XVATXGFMTJRS \
+            --paths "/*"
+
       - name: Debug: Environment Variables
-         run: |
-            echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
-            echo "AWS_SECRET_ACCESS_KEY: [REDACTED]"
-            echo "AWS_REGION: $AWS_REGION"
-            echo "CLOUDFRONT_DISTRIBUTION_ID: $CLOUDFRONT_DISTRIBUTION_ID"
+        run: |
+          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+          echo "AWS_SECRET_ACCESS_KEY: [REDACTED]"
+          echo "AWS_REGION: $AWS_REGION"
+          echo "CLOUDFRONT_DISTRIBUTION_ID: $CLOUDFRONT_DISTRIBUTION_ID"
