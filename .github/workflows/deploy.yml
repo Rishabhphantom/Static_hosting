@@ -31,3 +31,9 @@ jobs:
           aws cloudfront create-invalidation \
             -- distribution-id E2XVATXGFMTJRS \
             -- paths "/*"
+      - name: Debug: Environment Variables
+         run: |
+            echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+            echo "AWS_SECRET_ACCESS_KEY: [REDACTED]"
+            echo "AWS_REGION: $AWS_REGION"
+            echo "CLOUDFRONT_DISTRIBUTION_ID: $CLOUDFRONT_DISTRIBUTION_ID"
